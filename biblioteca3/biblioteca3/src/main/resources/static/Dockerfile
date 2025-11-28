@@ -1,4 +1,4 @@
-FROM maven:3.8.5-openjdk-25 AS builder
+FROM maven:3.8.5-openjdk-17 AS builder
 
 WORKDIR /usr/src/app
 
@@ -6,7 +6,7 @@ copy pom.xml .
 
 run mvn clean package -DskipTests
 
-FROM eclipse-temurin:25-jdk-alpine
+FROM eclipse-temurin:17-jdk-alpine
 
 run apk add --no-cache ca-certificates && update-ca-certificates
 
