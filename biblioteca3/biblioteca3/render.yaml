@@ -4,7 +4,7 @@ services:
     branch: main
     autoDeploy: true
     plan: free
-    dockerfilePath: ./Dockerfile
+    dockerfilePath:  ./biblioteca3/Dockerfile
     envVars:
       - key: SPRING_DATASOURCE_URL
         value: jdbc:mysql://proyecto-final-mysql:3306/db_biblioteca?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
