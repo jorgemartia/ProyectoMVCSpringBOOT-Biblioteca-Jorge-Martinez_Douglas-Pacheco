@@ -1,4 +1,5 @@
-const API_URL = 'https://proyectomvcspringboot-biblioteca-jorge-myri.onrender.com/api';
+// script.js — Código corregido sin bugs de pestañas
+const API_URL = 'http://localhost:8080/api';
 let usuarioActual = null;
 
 // ===== GESTIÓN DE VISTAS =====
