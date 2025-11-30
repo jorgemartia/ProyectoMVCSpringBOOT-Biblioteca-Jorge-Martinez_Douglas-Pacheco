@@ -1,7 +1,7 @@
 services:
   - type: web
     name: biblioteca-backend
-    env: docker
+    runtime: docker
     repo: https://github.com/jorgemartia/ProyectoMVCSpringBOOT-Biblioteca-Jorge-Martinez_Douglas-Pacheco
     branch: develop
     dockerfilePath: ./Dockerfile
