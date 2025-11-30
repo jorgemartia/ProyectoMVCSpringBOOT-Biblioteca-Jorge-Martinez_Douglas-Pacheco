@@ -1,15 +1,16 @@
 services:
-  - name: proyecto-biblioteca
-    type: web
-    env: docker
+  - type: web
+    name: proyecto-final-Jorge-Douglas
     branch: main
     autoDeploy: true
     plan: free
-    dockerfilePath: Dockerfile
-    # healthCheckPath: "/api/libros"  # descomenta si tu app tiene este endpoint
-
-databases:
-  - name: biblioteca-db
-    databaseName: db_biblioteca
-    user: biblio_user
-    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mysql://proyecto-final-mysql:3306/db_biblioteca?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      - key: SPRING_DATASOURCE_USERNAME
+        value: biblio_user
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: biblio_pass
+      - key: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+        value: org.hibernate.dialect.MySQL8Dialect
