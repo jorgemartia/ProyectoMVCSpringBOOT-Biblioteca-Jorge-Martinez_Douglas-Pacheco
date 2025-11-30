@@ -1,7 +1,7 @@
 services:
   - type: web
     name: proyecto-final-Jorge-Douglas
-    branch: main
+    branch: develop
     autoDeploy: true
     plan: free
     dockerfilePath:  ./biblioteca3/Dockerfile
