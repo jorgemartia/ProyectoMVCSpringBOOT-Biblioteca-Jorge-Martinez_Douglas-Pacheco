@@ -1,16 +1,9 @@
 services:
   - type: web
-    name: proyecto-final-Jorge-Douglas
+    name: biblioteca-backend
+    env: docker
+    repo: https://github.com/jorgemartia/ProyectoMVCSpringBOOT-Biblioteca-Jorge-Martinez_Douglas-Pacheco
     branch: develop
-    autoDeploy: true
+    dockerfilePath: ./Dockerfile
     plan: free
-    dockerfilePath:  ./biblioteca3/Dockerfile
-    envVars:
-      - key: SPRING_DATASOURCE_URL
-        value: jdbc:mysql://proyecto-final-mysql:3306/db_biblioteca?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      - key: SPRING_DATASOURCE_USERNAME
-        value: biblio_user
-      - key: SPRING_DATASOURCE_PASSWORD
-        value: biblio_pass
-      - key: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
-        value: org.hibernate.dialect.MySQL8Dialect
+    autoDeploy: true
