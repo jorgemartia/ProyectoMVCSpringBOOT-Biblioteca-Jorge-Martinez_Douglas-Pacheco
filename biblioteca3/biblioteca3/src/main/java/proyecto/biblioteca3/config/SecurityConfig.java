@@ -25,13 +25,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/**").permitAll()  // ✅ CAMBIO AQUÍ: Permite todo a /api/**
-                .anyRequest().permitAll()
-            );
-        
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/api/**").permitAll()
+                        .requestMatchers("/actuator/health").permitAll() // Para health checks
+                        .anyRequest().authenticated());
+
         return http.build();
     }
 

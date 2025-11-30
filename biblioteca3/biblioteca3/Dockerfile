@@ -1,13 +1,21 @@
+FROM eclipse-temurin:21-jdk AS build
+WORKDIR /workspace
 
-FROM maven:3.8.5-openjdk-25 AS build
-WORKDIR /app
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends curl unzip ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY mvnw .
+COPY .mvn .mvn
 COPY pom.xml .
+RUN chmod +x mvnw
+
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN ./mvnw -B package -DskipTests
 
-FROM openjdk:25-jdk-slim
+FROM eclipse-temurin:21-jre
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
-
+COPY --from=build /workspace/target/*.jar /app/app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENV JAVA_OPTS="-Xms256m -Xmx512m"
+ENTRYPOINT ["/bin/sh","-c","java $JAVA_OPTS -Dserver.port=${PORT:-8080} -jar /app/app.jar"]

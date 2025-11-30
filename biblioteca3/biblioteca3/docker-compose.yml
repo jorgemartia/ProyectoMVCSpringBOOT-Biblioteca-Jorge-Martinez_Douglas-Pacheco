@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  # Base de datos MySQL
+  mysql:
+    image: mysql:8.0
+    container_name: biblioteca-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 0578
+      MYSQL_DATABASE: db_biblioteca
+      MYSQL_USER: biblio_user
+      MYSQL_PASSWORD: biblio_pass
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p0578"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    image: biblioteca-app
+    container_name: biblioteca-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/db_biblioteca?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: biblio_user
+      SPRING_DATASOURCE_PASSWORD: biblio_pass
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+    ports:
+      - "8080:8080"
+
+networks:
+  biblioteca-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
