@@ -1,53 +1,45 @@
 package proyecto.biblioteca3.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.Indexed;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "usuarios")
+@Document(collection = "usuarios")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Usuario {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(nullable = false, length = 100)
+    private String id; // MongoDB usa String para IDs
+    
     private String nombre;
-
-    @Column(nullable = false, length = 100)
+    
     private String apellido;
-
-    @Column(nullable = false, unique = true, length = 20)
+    
+    @Indexed(unique = true)
     private String cedula;
-
-    @Column(length = 20)
+    
     private String telefono;
-
-    @Column(nullable = false, unique = true, length = 100)
+    
+    @Indexed(unique = true)
     private String email;
-
-    @Column(nullable = false)
+    
     private String clave;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    
     @Builder.Default
     private RolUsuario rol = RolUsuario.USUARIO;
-
-    @Column(nullable = false, updatable = false)
+    
     private LocalDateTime fechaRegistro;
-
-    @Column(nullable = false)
+    
     @Builder.Default
     private Boolean activo = true;
 
-    @PrePersist
-    protected void onCreate() {
+    // Hook para establecer valores por defecto
+    public void prePersist() {
         if (fechaRegistro == null) {
             fechaRegistro = LocalDateTime.now();
         }

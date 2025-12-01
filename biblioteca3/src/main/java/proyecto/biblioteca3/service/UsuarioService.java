@@ -37,6 +37,7 @@ public class UsuarioService {
                 .fechaRegistro(LocalDateTime.now())
                 .build();
 
+        usuario.prePersist();
         return usuarioRepository.save(usuario);
     }
 
@@ -48,7 +49,7 @@ public class UsuarioService {
         return Optional.empty();
     }
 
-    public Optional<Usuario> obtenerPorId(Integer id) {
+    public Optional<Usuario> obtenerPorId(String id) {
         return usuarioRepository.findById(id);
     }
 

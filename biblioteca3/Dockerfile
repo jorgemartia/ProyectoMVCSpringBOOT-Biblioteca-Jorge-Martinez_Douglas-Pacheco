@@ -1,21 +1,36 @@
-FROM eclipse-temurin:25-jdk AS build
-WORKDIR /workspace
+# ====================
+# STAGE 1: BUILD
+# ====================
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 
-RUN apt-get update \
- && apt-get install -y --no-install-recommends curl unzip ca-certificates \
- && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
 
+# Copiar archivos de Maven
+COPY pom.xml .
 COPY mvnw .
 COPY .mvn .mvn
-COPY pom.xml .
-RUN chmod +x mvnw
 
+# Descargar dependencias
+RUN mvn dependency:go-offline -B
+
+# Copiar código fuente
 COPY src ./src
-RUN ./mvnw -B package -DskipTests
 
-FROM eclipse-temurin:25-jre
+# Compilar sin tests
+RUN mvn clean package -DskipTests
+
+# ====================
+# STAGE 2: RUNTIME
+# ====================
+FROM eclipse-temurin:21-jre-alpine
+
 WORKDIR /app
-COPY --from=build /workspace/target/*.jar /app/app.jar
+
+# Copiar JAR compilado
+COPY --from=build /app/target/*.jar app.jar
+
+# Exponer puerto (Render usa $PORT)
 EXPOSE 8080
-ENV JAVA_OPTS="-Xms256m -Xmx512m"
-ENTRYPOINT ["/bin/sh","-c","java $JAVA_OPTS -Dserver.port=${PORT:-8080} -jar /app/app.jar"]
+
+# Ejecutar aplicación
+ENTRYPOINT ["java", "-jar", "app.jar"]

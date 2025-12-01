@@ -15,11 +15,11 @@ public class PrestamoService {
         return prestamoRepository.findAll();
     }
 
-    public List<Prestamo> obtenerPorUsuario(Integer usuarioId) {
+    public List<Prestamo> obtenerPorUsuario(String usuarioId) {
         return prestamoRepository.findByUsuarioId(usuarioId);
     }
 
-    public Prestamo obtenerPorId(Integer id) {
+    public Prestamo obtenerPorId(String id) {
         return prestamoRepository.findById(id).orElse(null);
     }
 
@@ -31,7 +31,7 @@ public class PrestamoService {
         return prestamoRepository.save(prestamo);
     }
 
-    public void eliminar(Integer id) {
+    public void eliminar(String id) {
         prestamoRepository.deleteById(id);
     }
 }

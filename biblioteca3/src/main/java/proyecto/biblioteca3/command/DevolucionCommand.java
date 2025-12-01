@@ -8,34 +8,19 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
-/**
- * Comando para devolver un libro prestado.
- * Encapsula la lógica de devolución siguiendo el patrón Command.
- */
 @Component
 @RequiredArgsConstructor
 public class DevolucionCommand implements Command<Prestamo> {
 
     private final PrestamoService prestamoService;
     private final LibroService libroService;
-    private Integer prestamoId;
+    private String prestamoId; // Cambio de Integer a String
 
-    /**
-     * Configura el ID del préstamo a devolver.
-     */
-    public DevolucionCommand configurar(Integer prestamoId) {
+    public DevolucionCommand configurar(String prestamoId) {
         this.prestamoId = prestamoId;
         return this;
     }
 
-    /**
-     * Ejecuta la devolución del libro:
-     * - Busca el préstamo
-     * - Actualiza su estado a DEVUELTO
-     * - Incrementa la disponibilidad del libro
-     * 
-     * @return El préstamo actualizado
-     */
     @Override
     public Prestamo ejecutar() {
         if (prestamoId == null) {
@@ -52,20 +37,15 @@ public class DevolucionCommand implements Command<Prestamo> {
             throw new IllegalStateException("Este préstamo ya fue devuelto");
         }
 
-        // Actualizar el préstamo
         prestamo.setFechaDevolucionReal(LocalDate.now());
         prestamo.setEstado(Prestamo.EstadoPrestamo.DEVUELTO);
 
-        // Incrementar disponibilidad del libro
         libroService.devolverLibro(prestamo.getLibro().getId());
 
         return prestamoService.actualizar(prestamo);
     }
 
-    /**
-     * Método de conveniencia para ejecutar directamente.
-     */
-    public Prestamo ejecutar(Integer prestamoId) {
+    public Prestamo ejecutar(String prestamoId) {
         this.prestamoId = prestamoId;
         return ejecutar();
     }

@@ -1,47 +1,43 @@
 package proyecto.biblioteca3.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "libros")
+@Document(collection = "libros")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Libro {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(nullable = false, length = 150)
+    private String id; // MongoDB usa String para IDs
+    
+    @Indexed
     private String titulo;
-
-    @Column(nullable = false, length = 100)
+    
     private String autor;
-
-    @Column(unique = true, length = 20)
+    
+    @Indexed(unique = true)
     private String isbn;
-
-    @Column(columnDefinition = "TEXT")
+    
     private String descripcion;
-
-    @Column(nullable = false)
+    
     private Integer cantidadTotal;
-
-    @Column(nullable = false)
+    
     private Integer cantidadDisponible;
-
-    @Column(length = 50)
+    
     private String categoria;
-
-    @Column(nullable = false, updatable = false)
+    
     private LocalDateTime fechaIngreso;
 
-    @PrePersist
-    protected void onCreate() {
+    // Hook para establecer valores por defecto
+    public void prePersist() {
         if (fechaIngreso == null) {
             fechaIngreso = LocalDateTime.now();
         }

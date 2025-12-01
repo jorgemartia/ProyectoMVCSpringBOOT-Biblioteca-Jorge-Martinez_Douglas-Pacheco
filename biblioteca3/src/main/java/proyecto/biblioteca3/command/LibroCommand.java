@@ -7,10 +7,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-/**
- * Comando para agregar o actualizar libros en el sistema.
- * Implementa el patrón Command para encapsular la lógica de gestión de libros.
- */
 @Component
 @RequiredArgsConstructor
 public class LibroCommand implements Command<Libro> {
@@ -23,24 +19,12 @@ public class LibroCommand implements Command<Libro> {
         AGREGAR, ACTUALIZAR
     }
 
-    /**
-     * Configura el libro y la operación a ejecutar.
-     * 
-     * @param libro     El libro a procesar
-     * @param operacion El tipo de operación (AGREGAR o ACTUALIZAR)
-     * @return Esta instancia del comando
-     */
     public LibroCommand configurar(Libro libro, TipoOperacion operacion) {
         this.libro = libro;
         this.operacion = operacion;
         return this;
     }
 
-    /**
-     * Ejecuta el comando según la operación configurada.
-     * 
-     * @return El libro guardado o actualizado
-     */
     @Override
     public Libro ejecutar() {
         if (libro == null || operacion == null) {
@@ -53,13 +37,10 @@ public class LibroCommand implements Command<Libro> {
         };
     }
 
-    /**
-     * Agrega un nuevo libro al sistema.
-     */
     private Libro agregarLibro() {
         validarCampos();
 
-        if (libro.getId() == null) {
+        if (libro.getId() == null || libro.getId().isEmpty()) {
             libro.setCantidadDisponible(libro.getCantidadTotal());
             libro.setFechaIngreso(LocalDateTime.now());
         }
@@ -67,17 +48,11 @@ public class LibroCommand implements Command<Libro> {
         return libroService.guardar(libro);
     }
 
-    /**
-     * Actualiza un libro existente.
-     */
     private Libro actualizarLibro() {
         validarCampos();
         return libroService.guardar(libro);
     }
 
-    /**
-     * Valida que los campos requeridos del libro estén completos.
-     */
     private void validarCampos() {
         if (libro.getTitulo() == null || libro.getTitulo().trim().isEmpty()) {
             throw new IllegalArgumentException("El título del libro es requerido");

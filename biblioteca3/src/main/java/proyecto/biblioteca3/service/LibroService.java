@@ -4,8 +4,7 @@ import proyecto.biblioteca3.model.*;
 import proyecto.biblioteca3.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime; // ✅ Agregar este import
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,11 +26,13 @@ public class LibroService {
                 throw new RuntimeException("La cantidad total debe ser mayor a 0");
             }
             
-            if (libro.getId() == null) {
-                // Nuevo libro: cantidad disponible = cantidad total
+            // Si es nuevo libro, establecer valores por defecto
+            if (libro.getId() == null || libro.getId().isEmpty()) {
                 libro.setCantidadDisponible(libro.getCantidadTotal());
                 libro.setFechaIngreso(LocalDateTime.now());
             }
+            
+            libro.prePersist();
             return libroRepository.save(libro);
         } catch (Exception e) {
             System.err.println("Error en LibroService.guardar: " + e.getMessage());
@@ -43,16 +44,15 @@ public class LibroService {
         return libroRepository.findAll();
     }
     
-    public Optional<Libro> obtenerPorId(Integer id) {
+    public Optional<Libro> obtenerPorId(String id) {
         return libroRepository.findById(id);
     }
     
-    public void eliminar(Integer id) {
+    public void eliminar(String id) {
         libroRepository.deleteById(id);
     }
     
-    @Transactional
-    public boolean prestarLibro(Integer libroId) {
+    public boolean prestarLibro(String libroId) {
         Optional<Libro> libroOpt = libroRepository.findById(libroId);
         if (libroOpt.isPresent()) {
             Libro libro = libroOpt.get();
@@ -65,8 +65,7 @@ public class LibroService {
         return false;
     }
     
-    @Transactional
-    public void devolverLibro(Integer libroId) {
+    public void devolverLibro(String libroId) {
         Optional<Libro> libroOpt = libroRepository.findById(libroId);
         if (libroOpt.isPresent()) {
             Libro libro = libroOpt.get();
