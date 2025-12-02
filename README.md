@@ -109,7 +109,7 @@ Al iniciar la aplicación, se crea automáticamente un usuario administrador:
 
 
 ## 📁 Estructura del Proyecto
-
+```
 src/main/java/proyecto/biblioteca3/
 ├── command/           # Patrón Command
 │   ├── Command.java
@@ -147,14 +147,15 @@ src/main/java/proyecto/biblioteca3/
     ├── ValidacionUsuario.java
     ├── ValidacionPermiso.java
     └── ValidadorPrestamos.java
-🔌 API Endpoints
-## Usuarios
+```
+## 🔌 API Endpoints
+### Usuarios
 
 POST /api/usuarios/registro - Registrar nuevo usuario
 POST /api/usuarios/login - Iniciar sesión
 GET /api/usuarios - Listar usuarios
 
-## Libros
+### Libros
 
 GET /api/libros - Listar todos los libros
 GET /api/libros/{id} - Obtener libro por ID
@@ -162,7 +163,7 @@ POST /api/libros - Crear libro (Admin)
 PUT /api/libros/{id} - Actualizar libro (Admin)
 DELETE /api/libros/{id} - Eliminar libro (Admin)
 
-## Préstamos
+### Préstamos
 
 GET /api/prestamos - Listar préstamos (Admin: todos, Usuario: propios)
 GET /api/prestamos/usuario/{id} - Préstamos de un usuario
