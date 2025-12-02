@@ -11,6 +11,10 @@ import proyecto.biblioteca3.command.*;
 import proyecto.biblioteca3.validador.*;
 import org.springframework.http.HttpStatus;
 
+/**
+ * Controlador REST para la gestión de libros.
+ * Proporciona endpoints para operaciones CRUD sobre libros.
+ */
 @RestController
 @RequestMapping("/api/libros")
 @RequiredArgsConstructor
@@ -19,12 +23,14 @@ public class LibroController {
 
         private final LibroService libroService;
         private final LibroCommand libroCommand;
-        
-        // ✅ Inyectar validadores
         private final ValidacionUsuario validadorUsuarios;
         private final ValidacionPermiso validadorPermisos;
         private final ValidacionLibro validadorLibros;
 
+         /**
+         * Lista todos los libros del catálogo.
+         * @return ResponseEntity con lista de libros
+         */
         @GetMapping
         public ResponseEntity<ApiResponse<List<Libro>>> listar() {
                 return ResponseEntity.ok(ApiResponse.<List<Libro>>builder()
@@ -33,6 +39,11 @@ public class LibroController {
                                 .build());
         }
 
+        /**
+         * Obtiene un libro por su ID.
+         * @param id ID del libro
+         * @return ResponseEntity con el libro encontrado
+         */
         @GetMapping("/{id}")
         public ResponseEntity<ApiResponse<Libro>> obtener(@PathVariable Integer id) {
                 try {
@@ -45,17 +56,21 @@ public class LibroController {
                         return ResponseEntity.notFound().build();
                 }
         }
-
+        /**
+         * Crea un nuevo libro (solo ADMIN).
+         * @param libro datos del libro a crear
+         * @param usuarioId ID del usuario que realiza la operación
+         * @return ResponseEntity con el libro creado
+         */
         @PostMapping
         public ResponseEntity<ApiResponse<Libro>> crear(
                         @RequestBody Libro libro,
                         @RequestParam Integer usuarioId) {
                 try {
-                        // ✅ Validaciones modulares
+
                         Usuario usuario = validadorUsuarios.validarExiste(usuarioId);
                         validadorPermisos.validarGestionLibros(usuario);
 
-                        // Usar el patrón Command
                         Libro creado = libroCommand
                                         .configurar(libro, LibroCommand.TipoOperacion.AGREGAR)
                                         .ejecutar();
@@ -79,6 +94,13 @@ public class LibroController {
                                                         .build());
                 }
         }
+        /**
+         * Actualiza un libro existente (solo ADMIN).
+         * @param id ID del libro a actualizar
+         * @param libro datos actualizados del libro
+         * @param usuarioId ID del usuario que realiza la operación
+         * @return ResponseEntity con el libro actualizado
+         */
 
         @PutMapping("/{id}")
         public ResponseEntity<ApiResponse<Libro>> actualizar(
@@ -86,14 +108,13 @@ public class LibroController {
                         @RequestBody Libro libro,
                         @RequestParam Integer usuarioId) {
                 try {
-                        // ✅ Validaciones modulares
+
                         Usuario usuario = validadorUsuarios.validarExiste(usuarioId);
                         validadorPermisos.validarGestionLibros(usuario);
                         validadorLibros.validarExiste(id, "actualizar");
 
                         libro.setId(id);
 
-                        // Usar el patrón Command
                         Libro actualizado = libroCommand
                                         .configurar(libro, LibroCommand.TipoOperacion.ACTUALIZAR)
                                         .ejecutar();
@@ -117,13 +138,18 @@ public class LibroController {
                                                         .build());
                 }
         }
+        /**
+         * Elimina un libro del catálogo (solo ADMIN).
+         * @param id ID del libro a eliminar
+         * @param usuarioId ID del usuario que realiza la operación
+         * @return ResponseEntity con resultado de la operación
+         */
 
         @DeleteMapping("/{id}")
         public ResponseEntity<ApiResponse<Void>> eliminar(
                         @PathVariable Integer id,
                         @RequestParam Integer usuarioId) {
                 try {
-                        // ✅ Validaciones modulares
                         Usuario usuario = validadorUsuarios.validarExiste(usuarioId);
                         validadorPermisos.validarGestionLibros(usuario);
                         validadorLibros.validarExiste(id, "eliminar");

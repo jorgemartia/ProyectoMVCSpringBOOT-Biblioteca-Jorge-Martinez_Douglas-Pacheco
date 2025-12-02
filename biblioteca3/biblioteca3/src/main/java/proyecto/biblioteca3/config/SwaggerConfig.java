@@ -3,7 +3,9 @@ package proyecto.biblioteca3.config;
 import io.swagger.v3.oas.models.info.Info;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+/**
+ * Configuración de Swagger para documentación de la API.
+ */
 @Configuration
 public class SwaggerConfig {
 

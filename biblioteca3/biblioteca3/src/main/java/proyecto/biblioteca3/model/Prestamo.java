@@ -5,7 +5,9 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
+/**
+ * Entidad que representa un préstamo de libro a un usuario.
+ */
 @Entity
 @Table(name = "prestamos")
 @Data

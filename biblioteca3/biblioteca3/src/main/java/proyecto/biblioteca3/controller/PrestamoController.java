@@ -13,6 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
 
+/**
+ * Controlador REST para la gestión de préstamos de libros.
+ */
+
 @RestController
 @RequestMapping("/api/prestamos")
 @RequiredArgsConstructor
@@ -28,13 +32,13 @@ public class PrestamoController {
         private final ProxyService proxyService;
         private final DevolucionCommand devolucionCommand;
         
-        // ✅ Validadores modulares
+        // Validadores modulares
         private final ValidadorPrestamos validadorPrestamos;  // TU VALIDADOR ORIGINAL
         private final ValidacionUsuario validadorUsuarios;
         private final ValidacionLibro validadorLibros;
         private final ValidacionPermiso validadorPermiso;
         
-
+       /** Lista préstamos según permisos (Admin: todos, Usuario: propios) */
         @GetMapping
         public ResponseEntity<ApiResponse<List<Prestamo>>> listar(@RequestParam Integer usuarioId) {
                 Usuario usuario = validadorUsuarios.validarExiste(usuarioId);
@@ -52,6 +56,7 @@ public class PrestamoController {
                                 .build());
         }
 
+        /** Crea un nuevo préstamo con validaciones de disponibilidad y límites */
         @PostMapping
         public ResponseEntity<ApiResponse<Prestamo>> crear(@RequestBody PrestamoRequest req) {
                 try {
@@ -102,16 +107,17 @@ public class PrestamoController {
                 }
         }
 
+        /** Procesa la devolución de un libro prestado */
         @PutMapping("/{id}/devolver")
         public ResponseEntity<ApiResponse<Prestamo>> devolver(
                         @PathVariable Integer id,
                         @RequestParam Integer usuarioId) {
                 try {
-                        // ✅ Validaciones modulares
+                        // Validaciones modulares
                         
                         Prestamo prestamo = validadorPrestamos.validarExiste(id);
                         
-                        // ✅ Usar TU VALIDADOR ORIGINAL
+                        // Usar TU VALIDADOR ORIGINAL
                         validadorPrestamos.validarDevolucion(prestamo);
                         
 
@@ -137,6 +143,7 @@ public class PrestamoController {
                 }
         }
 
+        /** Actualiza los datos de un préstamo existente */
         @PutMapping("/{id}")
         public ResponseEntity<ApiResponse<Prestamo>> actualizar(
                         @PathVariable Integer id,
@@ -161,6 +168,7 @@ public class PrestamoController {
                 }
         }
 
+        /** Elimina un préstamo del sistema */
         @DeleteMapping("/{id}")
         public ResponseEntity<ApiResponse<Void>> eliminar(@PathVariable Integer id) {
                 try {
@@ -179,7 +187,8 @@ public class PrestamoController {
                                                         .build());
                 }
         }
-
+        
+        /** Obtiene todos los préstamos de un usuario específico */
         @GetMapping("/usuario/{usuarioId}")
         public ResponseEntity<ApiResponse<List<Prestamo>>> obtenerPorUsuario(@PathVariable Integer usuarioId) {
                 try {
@@ -198,6 +207,8 @@ public class PrestamoController {
                                                         .build());
                 }
         }
+        
+        /** Elimina todos los préstamos con estado DEVUELTO (solo ADMIN) */
         @DeleteMapping("/limpiar-devueltos")
         public ResponseEntity<ApiResponse<Integer>> limpiarDevueltos(@RequestParam Integer usuarioId) {
                 try {

@@ -12,7 +12,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-
+/**
+ * Configuración de seguridad de Spring Security.
+ * Configura encriptación de contraseñas, CORS y permisos de acceso.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -21,6 +24,13 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+      /**
+     * Configura la cadena de filtros de seguridad.
+     * Permite acceso público a todos los endpoints.
+     * 
+     * @param http configuración de seguridad HTTP
+     * @return SecurityFilterChain configurado
+     */
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,7 +44,10 @@ public class SecurityConfig {
         
         return http.build();
     }
-
+    /**
+     * Configura CORS para permitir solicitudes desde cualquier origen.
+     * @return CorsConfigurationSource configurado
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

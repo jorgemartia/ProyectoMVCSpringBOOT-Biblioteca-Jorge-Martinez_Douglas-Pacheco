@@ -8,12 +8,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime; // ✅ Agregar este import
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * Servicio para la gestión de libros en la biblioteca.
+ * Proporciona métodos para guardar, obtener, eliminar, prestar y devolver libros.
+ */
 @Service
 @RequiredArgsConstructor
 public class LibroService {
     private final LibroRepository libroRepository;
-    
+     /**
+     * Guarda o actualiza un libro en el sistema.
+     * @param libro el libro a guardar
+     * @return el libro guardado
+     */
     @SuppressWarnings("UseSpecificCatch")
     public Libro guardar(Libro libro) {
         try {
@@ -51,7 +58,11 @@ public class LibroService {
     public void eliminar(Integer id) {
         libroRepository.deleteById(id);
     }
-    
+    /**
+     * Reduce la cantidad disponible de un libro al prestarlo.
+     * @param libroId ID del libro a prestar
+     * @return true si el préstamo fue exitoso, false si no hay disponibilidad
+     */
     @Transactional
     public boolean prestarLibro(Integer libroId) {
         Optional<Libro> libroOpt = libroRepository.findById(libroId);
@@ -65,7 +76,10 @@ public class LibroService {
         }
         return false;
     }
-    
+    /**
+     * Incrementa la cantidad disponible de un libro al devolverlo.
+     * @param libroId ID del libro devuelto
+     */
     @Transactional
     public void devolverLibro(Integer libroId) {
         Optional<Libro> libroOpt = libroRepository.findById(libroId);

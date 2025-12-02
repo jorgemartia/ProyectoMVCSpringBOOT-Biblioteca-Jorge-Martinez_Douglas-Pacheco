@@ -5,7 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+/**
+ * Repositorio JPA para operaciones de acceso a datos de préstamos.
+ * Proporciona métodos CRUD automáticos y consultas personalizadas para la entidad Prestamo.
+ */
 @Repository
 public interface PrestamoRepository extends JpaRepository<Prestamo, Integer> {
     List<Prestamo> findByUsuarioId(Integer usuarioId);

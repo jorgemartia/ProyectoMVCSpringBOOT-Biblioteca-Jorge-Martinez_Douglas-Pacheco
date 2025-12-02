@@ -9,7 +9,12 @@ import proyecto.biblioteca3.model.Usuario;
 import proyecto.biblioteca3.repository.UsuarioRepository;
 
 import java.time.LocalDateTime;
-
+/**
+ * Inicializador de datos por defecto del sistema.
+ * 
+ * <p>Crea automáticamente un usuario administrador al iniciar la aplicación
+ * si no existe en la base de datos.</p>
+ */
 @Configuration
 @RequiredArgsConstructor
 public class DataInitializer {

@@ -5,7 +5,10 @@ import proyecto.biblioteca3.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
-
+/**
+ * Servicio para la lógica de negocio de préstamos.
+ * Gestiona operaciones CRUD sobre préstamos de libros.
+ */
 @Service
 @RequiredArgsConstructor
 public class PrestamoService {

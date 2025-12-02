@@ -1,6 +1,8 @@
 package proyecto.biblioteca3.dto;
 import lombok.*;
-
+/**
+ * DTO para solicitudes de registro de nuevos usuarios.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

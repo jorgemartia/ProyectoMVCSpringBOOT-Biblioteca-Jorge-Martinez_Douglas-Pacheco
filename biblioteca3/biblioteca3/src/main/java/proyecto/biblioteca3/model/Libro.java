@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-
+/**
+ * Entidad que representa un libro en el catálogo de la biblioteca.
+ */
 @Entity
 @Table(name = "libros")
 @Data

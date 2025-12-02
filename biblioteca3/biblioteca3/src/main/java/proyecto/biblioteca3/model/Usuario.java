@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-
+/**
+ * Entidad que representa un usuario del sistema de biblioteca.
+ */
 @Entity
 @Table(name = "usuarios")
 @Data
