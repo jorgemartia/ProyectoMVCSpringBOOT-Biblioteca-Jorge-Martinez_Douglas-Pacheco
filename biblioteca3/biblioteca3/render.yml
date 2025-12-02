@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: biblioteca3
+    env: docker
+    dockerfilePath:  biblioteca3/biblioteca3/Dockerfile
+
+    buildCommand: ./mvnw clean install
+    startCommand: java -jar app.jar
+
+
+databases:
+  - name: biblioteca-db
+    engine: mysql
+    version: "8"
+    plan: freex
+    user: biblioteca_user
+    password: biblioteca_pass
+    database: db_biblioteca
+    allowPublicAccess: true
